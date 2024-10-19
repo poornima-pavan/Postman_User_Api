@@ -1,0 +1,1909 @@
+{
+	"info": {
+		"_postman_id": "88475930-71ee-455f-8a7e-2c80108702d7",
+		"name": "team5_postman_oct24",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17084687"
+	},
+	"item": [
+		{
+			"name": "Positive  Senarios",
+			"item": [
+				{
+					"name": "AddUser With All mandatory-201",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// VERIFY STATUS CODE\r",
+									"pm.test(\"Response status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"// VERIFY RESPONSE TIME\r",
+									"pm.test(\"Response time is within an acceptable range\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"// VERIFY CONTENT TYPE-JSON\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+									"});\r",
+									"\r",
+									"// VERIFY FIELD WITH DATA TYPES IN FIELD\r",
+									"pm.test(\"Response has the required fields\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.user_first_name).to.be.a(\"string\");\r",
+									"    pm.expect(responseData.user_last_name).to.be.a(\"string\");\r",
+									"    pm.expect(responseData.user_contact_number).to.be.a(\"number\");\r",
+									"    pm.expect(responseData.user_email_id).to.be.a(\"string\");\r",
+									"    pm.expect(responseData.creation_time).to.be.a(\"string\");\r",
+									"    pm.expect(responseData.last_mod_time).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"// CAPTURE USERID FROM RESPONSE AND USE IT FOR API CHAINING\r",
+									"const responseJson = pm.response.json();\r",
+									"pm.environment.set(\"user_id\", responseJson.user_id);\r",
+									"pm.environment.set(\"userFirstname\", responseJson.user_first_name);\r",
+									"\r",
+									"\r",
+									"//logging data in console\r",
+									"console.log(responseJson.user_first_name);\r",
+									"console.log(responseJson.user_last_name);\r",
+									"console.log(responseJson.user_contact_number);\r",
+									"console.log(responseJson.user_email_id);\r",
+									"console.log(pm.environment.get(\"user_id\")); // Fixed the ReferenceError by adding quotes around user_id\r",
+									"\r",
+									"// Verify the JSON schema of the response body\r",
+									"pm.test(\"Response body follows the JSON schema\", function () {\r",
+									"    var schema = {\r",
+									"        type: \"object\",\r",
+									"        properties: {\r",
+									"            userAddress: {\r",
+									"                type: \"object\",\r",
+									"                properties: {\r",
+									"                    addressId: { type: \"number\" },\r",
+									"                    plotNumber: { type: \"string\" },\r",
+									"                    street: { type: \"string\" },\r",
+									"                    state: { type: \"string\" },\r",
+									"                    country: { type: \"string\" },\r",
+									"                    zipCode: { type: \"number\" }\r",
+									"                },\r",
+									"                required: [\"addressId\", \"plotNumber\", \"street\", \"state\", \"country\", \"zipCode\"]\r",
+									"            },\r",
+									"            user_id: { type: \"number\" },\r",
+									"            user_first_name: { type: \"string\" },\r",
+									"            user_last_name: { type: \"string\" },\r",
+									"            user_contact_number: { type: \"number\" },\r",
+									"            user_email_id: { type: \"string\" },\r",
+									"            creation_time: { type: \"string\" },\r",
+									"            last_mod_time: { type: \"string\" }\r",
+									"        },\r",
+									"        required: [\"userAddress\", \"user_id\", \"user_first_name\", \"user_last_name\", \"user_contact_number\", \"user_email_id\", \"creation_time\", \"last_mod_time\"]\r",
+									"    };\r",
+									"    \r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{apitoken}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "Numpy@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_first_name\": \"testusetr\",\r\n    \"user_last_name\": \"numpyty\",\r\n    \"user_contact_number\": \"5656505679\",\r\n    \"user_email_id\": \"team5ps15689@gmail.com\",\r\n    \"userAddress\": {\r\n        \"plotNumber\": \"pl-3\",\r\n        \"street\": \"shadow sR\",\r\n        \"state\": \"GA\",\r\n        \"country\": \"INDIA\",\r\n        \"zipCode\": \"66466\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/createusers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"createusers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUserbyUserFirstName-200",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Validate the user schema\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('array').that.is.not.empty;\r",
+									"\r",
+									"    responseData.forEach(function(user) {\r",
+									"        pm.expect(user).to.have.property('user_id').that.is.a('number');\r",
+									"        pm.expect(user).to.have.property('user_first_name').that.is.a('string');\r",
+									"        pm.expect(user).to.have.property('user_last_name').that.is.a('string');\r",
+									"        pm.expect(user).to.have.property('user_contact_number').that.is.a('number');\r",
+									"        pm.expect(user).to.have.property('user_email_id').that.is.a('string');\r",
+									"        pm.expect(user).to.have.property('creation_time').that.is.a('string');\r",
+									"        pm.expect(user).to.have.property('last_mod_time').that.is.a('string');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Validate the userAddress schema\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('array').that.is.not.empty;\r",
+									"    responseData.forEach(function(user) {\r",
+									"        pm.expect(user).to.have.property('userAddress').that.is.an('object');\r",
+									"        pm.expect(user.userAddress).to.have.property('addressId').that.is.a('number');\r",
+									"        pm.expect(user.userAddress).to.have.property('plotNumber').that.is.a('string');\r",
+									"        pm.expect(user.userAddress).to.have.property('street').that.is.a('string');\r",
+									"        pm.expect(user.userAddress).to.have.property('state').that.is.a('string');\r",
+									"        pm.expect(user.userAddress).to.have.property('country').that.is.a('string');\r",
+									"        pm.expect(user.userAddress).to.have.property('zipCode').that.is.a('number');\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users/username/{{userFirstname}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"username",
+								"{{userFirstname}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllUsers-200",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('array');\r",
+									"    \r",
+									"    responseData.forEach(function(user) {\r",
+									"        pm.expect(user).to.have.property('userAddress');\r",
+									"        pm.expect(user).to.have.property('user_id');\r",
+									"        pm.expect(user).to.have.property('user_first_name');\r",
+									"        pm.expect(user).to.have.property('user_last_name');\r",
+									"        pm.expect(user).to.have.property('user_contact_number');\r",
+									"        pm.expect(user).to.have.property('user_email_id');\r",
+									"        pm.expect(user).to.have.property('creation_time');\r",
+									"        pm.expect(user).to.have.property('last_mod_time');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{apitoken}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "Numpy@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetuserbyUserId-200",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response content type is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"User address object is valid\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.userAddress).to.exist.and.to.be.an('object');\r",
+									"  pm.expect(responseData.userAddress.addressId).to.exist.and.to.be.a('number');\r",
+									"  pm.expect(responseData.userAddress.plotNumber).to.exist.and.to.be.a('string');\r",
+									"  pm.expect(responseData.userAddress.street).to.exist.and.to.be.a('string');\r",
+									"  pm.expect(responseData.userAddress.state).to.exist.and.to.be.a('string');\r",
+									"  pm.expect(responseData.userAddress.country).to.exist.and.to.be.a('string');\r",
+									"  pm.expect(responseData.userAddress.zipCode).to.exist.and.to.be.a('number');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"User ID is a non-negative integer\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData.user_id).to.be.a('number').and.to.be.at.least(0);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/user/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update First name and contatnumber-200",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"User address schema is valid\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData.userAddress).to.be.an('object');\r",
+									"  pm.expect(responseData.userAddress.addressId).to.be.a('number');\r",
+									"  pm.expect(responseData.userAddress.plotNumber).to.be.a('string');\r",
+									"  pm.expect(responseData.userAddress.street).to.be.a('string');\r",
+									"  pm.expect(responseData.userAddress.state).to.be.a('string');\r",
+									"  pm.expect(responseData.userAddress.country).to.be.a('string');\r",
+									"  pm.expect(responseData.userAddress.zipCode).to.be.a('number');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Validate user_id, user_first_name, user_last_name, user_contact_number, user_email_id, creation_time, and last_mod_time fields in the response\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.have.property('user_id').that.is.a('number');\r",
+									"    pm.expect(responseData).to.have.property('user_first_name').that.is.a('string');\r",
+									"    pm.expect(responseData).to.have.property('user_last_name').that.is.a('string');\r",
+									"    pm.expect(responseData).to.have.property('user_contact_number').that.is.a('number');\r",
+									"    pm.expect(responseData).to.have.property('user_email_id').that.is.a('string');\r",
+									"    pm.expect(responseData).to.have.property('creation_time').that.is.a('string');\r",
+									"    pm.expect(responseData).to.have.property('last_mod_time').that.is.a('string');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_first_name\": \"tester\",\r\n    \"user_last_name\": \"randomtester\",\r\n    \"user_contact_number\": \"5656565659\",\r\n    \"user_email_id\": \"team5psm12@gmail.com\",\r\n    \"userAddress\": {\r\n        \"plotNumber\": \"pl-3\",\r\n        \"street\": \"shadow sR\",\r\n        \"state\": \"GA\",\r\n        \"country\": \"INDIA\",\r\n        \"zipCode\": \"66466\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/updateuser/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"updateuser",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteUser-200",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields - status and message\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.status).to.exist;\r",
+									"    pm.expect(responseData.message).to.exist;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 500ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status and message fields are non-empty strings\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData.status).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Status should be a non-empty string\");\r",
+									"    pm.expect(responseData.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Message should be a non-empty string\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/deleteuser/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"deleteuser",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Negative senarios",
+			"item": [
+				{
+					"name": "AddUser Empty fieldname-400",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// VERIFY STATUS CODE\r",
+									"pm.test(\"Response status code is 409\", function () {\r",
+									"    pm.response.to.have.status(409);\r",
+									"});\r",
+									"\r",
+									"// VERIFY RESPONSE TIME\r",
+									"pm.test(\"Response time is within an acceptable range\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"// VERIFY CONTENT TYPE-JSON\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+									"});\r",
+									"\r",
+									"// VERIFY FIELD WITH DATA TYPES IN FIELD\r",
+									"// pm.test(\"Response has the required fields\", function () {\r",
+									"//     const responseData = pm.response.json();\r",
+									"//     pm.expect(responseData.user_first_name).to.be.a(\"string\");\r",
+									"//     pm.expect(responseData.user_last_name).to.be.a(\"string\");\r",
+									"//     pm.expect(responseData.user_contact_number).to.be.a(\"number\");\r",
+									"//     pm.expect(responseData.user_email_id).to.be.a(\"string\");\r",
+									"//     pm.expect(responseData.creation_time).to.be.a(\"string\");\r",
+									"//     pm.expect(responseData.last_mod_time).to.be.a(\"string\");\r",
+									"// });\r",
+									"\r",
+									"// CAPTURE USERID FROM RESPONSE AND USE IT FOR API CHAINING\r",
+									"const responseJson = pm.response.json();\r",
+									"pm.environment.set(\"user_id\", responseJson.user_id);\r",
+									"pm.environment.set(\"userFirstname\", responseJson.user_first_name);\r",
+									"\r",
+									"\r",
+									"//logging data in console\r",
+									"console.log(responseJson.user_first_name);\r",
+									"console.log(responseJson.user_last_name);\r",
+									"console.log(responseJson.user_contact_number);\r",
+									"console.log(responseJson.user_email_id);\r",
+									"console.log(pm.environment.get(\"user_id\")); // Fixed the ReferenceError by adding quotes around user_id\r",
+									"\r",
+									"// Verify the JSON schema of the response body\r",
+									"pm.test(\"Response body follows the JSON schema\", function () {\r",
+									"    var schema = {\r",
+									"        type: \"object\",\r",
+									"        properties: {\r",
+									"            userAddress: {\r",
+									"                type: \"object\",\r",
+									"                properties: {\r",
+									"                    addressId: { type: \"number\" },\r",
+									"                    plotNumber: { type: \"string\" },\r",
+									"                    street: { type: \"string\" },\r",
+									"                    state: { type: \"string\" },\r",
+									"                    country: { type: \"string\" },\r",
+									"                    zipCode: { type: \"number\" }\r",
+									"                },\r",
+									"                required: [\"addressId\", \"plotNumber\", \"street\", \"state\", \"country\", \"zipCode\"]\r",
+									"            },\r",
+									"            user_id: { type: \"number\" },\r",
+									"            user_first_name: { type: \"string\" },\r",
+									"            user_last_name: { type: \"string\" },\r",
+									"            user_contact_number: { type: \"number\" },\r",
+									"            user_email_id: { type: \"string\" },\r",
+									"            creation_time: { type: \"string\" },\r",
+									"            last_mod_time: { type: \"string\" }\r",
+									"        },\r",
+									"        required: [\"userAddress\", \"user_id\", \"user_first_name\", \"user_last_name\", \"user_contact_number\", \"user_email_id\", \"creation_time\", \"last_mod_time\"]\r",
+									"    };\r",
+									"    \r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{apitoken}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "Numpy@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_first_name\": \"\",\r\n    \"user_last_name\": \"numpy\",\r\n    \"user_contact_number\": \"5656505799\",\r\n    \"user_email_id\": \"team5psm151@gmail.com\",\r\n    \"userAddress\": {\r\n        \"plotNumber\": \"pl-3\",\r\n        \"street\": \"shadow sR\",\r\n        \"state\": \"GA\",\r\n        \"country\": \"INDIA\",\r\n        \"zipCode\": \"66466\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/createusers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"createusers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddUser Numeric Fieldname-400",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// VERIFY STATUS CODE\r",
+									"pm.test(\"Response status code is 409\", function () {\r",
+									"    pm.response.to.have.status(409);\r",
+									"});\r",
+									"\r",
+									"// VERIFY RESPONSE TIME\r",
+									"pm.test(\"Response time is within an acceptable range\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"// VERIFY CONTENT TYPE-JSON\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+									"});\r",
+									"\r",
+									"// VERIFY FIELD WITH DATA TYPES IN FIELD\r",
+									"// pm.test(\"Response has the required fields\", function () {\r",
+									"//     const responseData = pm.response.json();\r",
+									"//     pm.expect(responseData.user_first_name).to.be.a(\"string\");\r",
+									"//     pm.expect(responseData.user_last_name).to.be.a(\"string\");\r",
+									"//     pm.expect(responseData.user_contact_number).to.be.a(\"number\");\r",
+									"//     pm.expect(responseData.user_email_id).to.be.a(\"string\");\r",
+									"//     pm.expect(responseData.creation_time).to.be.a(\"string\");\r",
+									"//     pm.expect(responseData.last_mod_time).to.be.a(\"string\");\r",
+									"// });\r",
+									"\r",
+									"// CAPTURE USERID FROM RESPONSE AND USE IT FOR API CHAINING\r",
+									"const responseJson = pm.response.json();\r",
+									"pm.environment.set(\"user_id\", responseJson.user_id);\r",
+									"pm.environment.set(\"userFirstname\", responseJson.user_first_name);\r",
+									"\r",
+									"\r",
+									"//logging data in console\r",
+									"console.log(responseJson.user_first_name);\r",
+									"console.log(responseJson.user_last_name);\r",
+									"console.log(responseJson.user_contact_number);\r",
+									"console.log(responseJson.user_email_id);\r",
+									"console.log(pm.environment.get(\"user_id\")); // Fixed the ReferenceError by adding quotes around user_id\r",
+									"\r",
+									"// Verify the JSON schema of the response body\r",
+									"pm.test(\"Response body follows the JSON schema\", function () {\r",
+									"    var schema = {\r",
+									"        type: \"object\",\r",
+									"        properties: {\r",
+									"            userAddress: {\r",
+									"                type: \"object\",\r",
+									"                properties: {\r",
+									"                    addressId: { type: \"number\" },\r",
+									"                    plotNumber: { type: \"string\" },\r",
+									"                    street: { type: \"string\" },\r",
+									"                    state: { type: \"string\" },\r",
+									"                    country: { type: \"string\" },\r",
+									"                    zipCode: { type: \"number\" }\r",
+									"                },\r",
+									"                required: [\"addressId\", \"plotNumber\", \"street\", \"state\", \"country\", \"zipCode\"]\r",
+									"            },\r",
+									"            user_id: { type: \"number\" },\r",
+									"            user_first_name: { type: \"string\" },\r",
+									"            user_last_name: { type: \"string\" },\r",
+									"            user_contact_number: { type: \"number\" },\r",
+									"            user_email_id: { type: \"string\" },\r",
+									"            creation_time: { type: \"string\" },\r",
+									"            last_mod_time: { type: \"string\" }\r",
+									"        },\r",
+									"        required: [\"userAddress\", \"user_id\", \"user_first_name\", \"user_last_name\", \"user_contact_number\", \"user_email_id\", \"creation_time\", \"last_mod_time\"]\r",
+									"    };\r",
+									"    \r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{apitoken}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "Numpy@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_first_name\": 123546,\r\n    \"user_last_name\": \"numpy\",\r\n    \"user_contact_number\": \"5656505799\",\r\n    \"user_email_id\": \"team5psm151@gmail.com\",\r\n    \"userAddress\": {\r\n        \"plotNumber\": \"pl-3\",\r\n        \"street\": \"shadow sR\",\r\n        \"state\": \"GA\",\r\n        \"country\": \"INDIA\",\r\n        \"zipCode\": \"66466\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/createusers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"createusers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddUser Special Character -400 Copy 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// VERIFY STATUS CODE\r",
+									"pm.test(\"Response status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"// VERIFY RESPONSE TIME\r",
+									"pm.test(\"Response time is within an acceptable range\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"// VERIFY CONTENT TYPE-JSON\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+									"});\r",
+									"\r",
+									"// VERIFY FIELD WITH DATA TYPES IN FIELD\r",
+									"// pm.test(\"Response has the required fields\", function () {\r",
+									"//     const responseData = pm.response.json();\r",
+									"//     pm.expect(responseData.user_first_name).to.be.a(\"string\");\r",
+									"//     pm.expect(responseData.user_last_name).to.be.a(\"string\");\r",
+									"//     pm.expect(responseData.user_contact_number).to.be.a(\"number\");\r",
+									"//     pm.expect(responseData.user_email_id).to.be.a(\"string\");\r",
+									"//     pm.expect(responseData.creation_time).to.be.a(\"string\");\r",
+									"//     pm.expect(responseData.last_mod_time).to.be.a(\"string\");\r",
+									"// });\r",
+									"\r",
+									"// CAPTURE USERID FROM RESPONSE AND USE IT FOR API CHAINING\r",
+									"const responseJson = pm.response.json();\r",
+									"pm.environment.set(\"user_id\", responseJson.user_id);\r",
+									"pm.environment.set(\"userFirstname\", responseJson.user_first_name);\r",
+									"\r",
+									"\r",
+									"//logging data in console\r",
+									"console.log(responseJson.user_first_name);\r",
+									"console.log(responseJson.user_last_name);\r",
+									"console.log(responseJson.user_contact_number);\r",
+									"console.log(responseJson.user_email_id);\r",
+									"console.log(pm.environment.get(\"user_id\")); // Fixed the ReferenceError by adding quotes around user_id\r",
+									"\r",
+									"// Verify the JSON schema of the response body\r",
+									"pm.test(\"Response body follows the JSON schema\", function () {\r",
+									"    var schema = {\r",
+									"        type: \"object\",\r",
+									"        properties: {\r",
+									"            userAddress: {\r",
+									"                type: \"object\",\r",
+									"                properties: {\r",
+									"                    addressId: { type: \"number\" },\r",
+									"                    plotNumber: { type: \"string\" },\r",
+									"                    street: { type: \"string\" },\r",
+									"                    state: { type: \"string\" },\r",
+									"                    country: { type: \"string\" },\r",
+									"                    zipCode: { type: \"number\" }\r",
+									"                },\r",
+									"                required: [\"addressId\", \"plotNumber\", \"street\", \"state\", \"country\", \"zipCode\"]\r",
+									"            },\r",
+									"            user_id: { type: \"number\" },\r",
+									"            user_first_name: { type: \"string\" },\r",
+									"            user_last_name: { type: \"string\" },\r",
+									"            user_contact_number: { type: \"number\" },\r",
+									"            user_email_id: { type: \"string\" },\r",
+									"            creation_time: { type: \"string\" },\r",
+									"            last_mod_time: { type: \"string\" }\r",
+									"        },\r",
+									"        required: [\"userAddress\", \"user_id\", \"user_first_name\", \"user_last_name\", \"user_contact_number\", \"user_email_id\", \"creation_time\", \"last_mod_time\"]\r",
+									"    };\r",
+									"    \r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{apitoken}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "Numpy@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_first_name\": $$Z^#@,\r\n    \"user_last_name\": \"numpy\",\r\n    \"user_contact_number\": \"5656505799\",\r\n    \"user_email_id\": \"team5psm151@gmail.com\",\r\n    \"userAddress\": {\r\n        \"plotNumber\": \"pl-3\",\r\n        \"street\": \"shadow sR\",\r\n        \"state\": \"GA\",\r\n        \"country\": \"INDIA\",\r\n        \"zipCode\": \"66466\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/createusers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"createusers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddUser ContactNumber more than 10-400",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// VERIFY STATUS CODE\r",
+									"pm.test(\"Response status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"// VERIFY RESPONSE TIME\r",
+									"pm.test(\"Response time is within an acceptable range\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"// VERIFY CONTENT TYPE-JSON\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+									"});\r",
+									"\r",
+									"// // VERIFY FIELD WITH DATA TYPES IN FIELD\r",
+									"// pm.test(\"Response has the required fields\", function () {\r",
+									"//     const responseData = pm.response.json();\r",
+									"//     pm.expect(responseData.user_first_name).to.be.a(\"string\");\r",
+									"//     pm.expect(responseData.user_last_name).to.be.a(\"string\");\r",
+									"//     pm.expect(responseData.user_contact_number).to.be.a(\"number\");\r",
+									"//     pm.expect(responseData.user_email_id).to.be.a(\"string\");\r",
+									"//     pm.expect(responseData.creation_time).to.be.a(\"string\");\r",
+									"//     pm.expect(responseData.last_mod_time).to.be.a(\"string\");\r",
+									"// });\r",
+									"\r",
+									"// CAPTURE USERID FROM RESPONSE AND USE IT FOR API CHAINING\r",
+									"const responseJson = pm.response.json();\r",
+									"pm.environment.set(\"user_id\", responseJson.user_id);\r",
+									"pm.environment.set(\"userFirstname\", responseJson.user_first_name);\r",
+									"\r",
+									"\r",
+									"//logging data in console\r",
+									"console.log(responseJson.user_first_name);\r",
+									"console.log(responseJson.user_last_name);\r",
+									"console.log(responseJson.user_contact_number);\r",
+									"console.log(responseJson.user_email_id);\r",
+									"console.log(pm.environment.get(\"user_id\")); // Fixed the ReferenceError by adding quotes around user_id\r",
+									"\r",
+									"// Verify the JSON schema of the response body\r",
+									"pm.test(\"Response body follows the JSON schema\", function () {\r",
+									"    var schema = {\r",
+									"        type: \"object\",\r",
+									"        properties: {\r",
+									"            userAddress: {\r",
+									"                type: \"object\",\r",
+									"                properties: {\r",
+									"                    addressId: { type: \"number\" },\r",
+									"                    plotNumber: { type: \"string\" },\r",
+									"                    street: { type: \"string\" },\r",
+									"                    state: { type: \"string\" },\r",
+									"                    country: { type: \"string\" },\r",
+									"                    zipCode: { type: \"number\" }\r",
+									"                },\r",
+									"                required: [\"addressId\", \"plotNumber\", \"street\", \"state\", \"country\", \"zipCode\"]\r",
+									"            },\r",
+									"            user_id: { type: \"number\" },\r",
+									"            user_first_name: { type: \"string\" },\r",
+									"            user_last_name: { type: \"string\" },\r",
+									"            user_contact_number: { type: \"number\" },\r",
+									"            user_email_id: { type: \"string\" },\r",
+									"            creation_time: { type: \"string\" },\r",
+									"            last_mod_time: { type: \"string\" }\r",
+									"        },\r",
+									"        required: [\"userAddress\", \"user_id\", \"user_first_name\", \"user_last_name\", \"user_contact_number\", \"user_email_id\", \"creation_time\", \"last_mod_time\"]\r",
+									"    };\r",
+									"    \r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{apitoken}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "Numpy@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_first_name\": \"firstname\",\r\n    \"user_last_name\": \"numpy\",\r\n    \"user_contact_number\": \"565650579902589\",\r\n    \"user_email_id\": \"team5psm15000@gmail.com\",\r\n    \"userAddress\": {\r\n        \"plotNumber\": \"pl-3\",\r\n        \"street\": \"shadow sR\",\r\n        \"state\": \"GA\",\r\n        \"country\": \"INDIA\",\r\n        \"zipCode\": \"66466\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/createusers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"createusers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddUser existingemailID-400",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// VERIFY STATUS CODE\r",
+									"pm.test(\"Response status code is 409\", function () {\r",
+									"    pm.response.to.have.status(409);\r",
+									"});\r",
+									"\r",
+									"// VERIFY RESPONSE TIME\r",
+									"pm.test(\"Response time is within an acceptable range\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"// VERIFY CONTENT TYPE-JSON\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+									"});\r",
+									"\r",
+									"// VERIFY FIELD WITH DATA TYPES IN FIELD\r",
+									"// pm.test(\"Response has the required fields\", function () {\r",
+									"//     const responseData = pm.response.json();\r",
+									"//     pm.expect(responseData.user_first_name).to.be.a(\"string\");\r",
+									"//     pm.expect(responseData.user_last_name).to.be.a(\"string\");\r",
+									"//     pm.expect(responseData.user_contact_number).to.be.a(\"number\");\r",
+									"//     pm.expect(responseData.user_email_id).to.be.a(\"string\");\r",
+									"//     pm.expect(responseData.creation_time).to.be.a(\"string\");\r",
+									"//     pm.expect(responseData.last_mod_time).to.be.a(\"string\");\r",
+									"// });\r",
+									"\r",
+									"// CAPTURE USERID FROM RESPONSE AND USE IT FOR API CHAINING\r",
+									"const responseJson = pm.response.json();\r",
+									"pm.environment.set(\"user_id\", responseJson.user_id);\r",
+									"pm.environment.set(\"userFirstname\", responseJson.user_first_name);\r",
+									"\r",
+									"\r",
+									"//logging data in console\r",
+									"console.log(responseJson.user_first_name);\r",
+									"console.log(responseJson.user_last_name);\r",
+									"console.log(responseJson.user_contact_number);\r",
+									"console.log(responseJson.user_email_id);\r",
+									"console.log(pm.environment.get(\"user_id\")); // Fixed the ReferenceError by adding quotes around user_id\r",
+									"\r",
+									"// Verify the JSON schema of the response body\r",
+									"pm.test(\"Response body follows the JSON schema\", function () {\r",
+									"    var schema = {\r",
+									"        type: \"object\",\r",
+									"        properties: {\r",
+									"            userAddress: {\r",
+									"                type: \"object\",\r",
+									"                properties: {\r",
+									"                    addressId: { type: \"number\" },\r",
+									"                    plotNumber: { type: \"string\" },\r",
+									"                    street: { type: \"string\" },\r",
+									"                    state: { type: \"string\" },\r",
+									"                    country: { type: \"string\" },\r",
+									"                    zipCode: { type: \"number\" }\r",
+									"                },\r",
+									"                required: [\"addressId\", \"plotNumber\", \"street\", \"state\", \"country\", \"zipCode\"]\r",
+									"            },\r",
+									"            user_id: { type: \"number\" },\r",
+									"            user_first_name: { type: \"string\" },\r",
+									"            user_last_name: { type: \"string\" },\r",
+									"            user_contact_number: { type: \"number\" },\r",
+									"            user_email_id: { type: \"string\" },\r",
+									"            creation_time: { type: \"string\" },\r",
+									"            last_mod_time: { type: \"string\" }\r",
+									"        },\r",
+									"        required: [\"userAddress\", \"user_id\", \"user_first_name\", \"user_last_name\", \"user_contact_number\", \"user_email_id\", \"creation_time\", \"last_mod_time\"]\r",
+									"    };\r",
+									"    \r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{apitoken}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "Numpy@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_first_name\": \"firstname\",\r\n    \"user_last_name\": \"numpy\",\r\n    \"user_contact_number\": \"5656505790\",\r\n    \"user_email_id\": \"team5psm151@gmail.com\",\r\n    \"userAddress\": {\r\n        \"plotNumber\": \"pl-3\",\r\n        \"street\": \"shadow sR\",\r\n        \"state\": \"GA\",\r\n        \"country\": \"INDIA\",\r\n        \"zipCode\": \"66466\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/createusers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"createusers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllUsers-invalid endpoint-400",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Response has the required fields\", function () {\r",
+									"//     const responseData = pm.response.json();\r",
+									"    \r",
+									"//     pm.expect(responseData).to.be.an('array');\r",
+									"    \r",
+									"//     responseData.forEach(function(user) {\r",
+									"//         pm.expect(user).to.have.property('userAddress');\r",
+									"//         pm.expect(user).to.have.property('user_id');\r",
+									"//         pm.expect(user).to.have.property('user_first_name');\r",
+									"//         pm.expect(user).to.have.property('user_last_name');\r",
+									"//         pm.expect(user).to.have.property('user_contact_number');\r",
+									"//         pm.expect(user).to.have.property('user_email_id');\r",
+									"//         pm.expect(user).to.have.property('creation_time');\r",
+									"//         pm.expect(user).to.have.property('last_mod_time');\r",
+									"//     });\r",
+									"// });\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{apitoken}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "Numpy@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/user",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllUsers-empty endpoint-400 Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Response has the required fields\", function () {\r",
+									"//     const responseData = pm.response.json();\r",
+									"    \r",
+									"//     pm.expect(responseData).to.be.an('array');\r",
+									"    \r",
+									"//     responseData.forEach(function(user) {\r",
+									"//         pm.expect(user).to.have.property('userAddress');\r",
+									"//         pm.expect(user).to.have.property('user_id');\r",
+									"//         pm.expect(user).to.have.property('user_first_name');\r",
+									"//         pm.expect(user).to.have.property('user_last_name');\r",
+									"//         pm.expect(user).to.have.property('user_contact_number');\r",
+									"//         pm.expect(user).to.have.property('user_email_id');\r",
+									"//         pm.expect(user).to.have.property('creation_time');\r",
+									"//         pm.expect(user).to.have.property('last_mod_time');\r",
+									"//     });\r",
+									"// });\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{apitoken}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "Numpy@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUser FirstName-invalid endpoint-404",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 404\", function () {\r",
+									"  pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Validate the user schema\", function () {\r",
+									"//     const responseData = pm.response.json();\r",
+									"\r",
+									"//     pm.expect(responseData).to.be.an('object'); // Updated to check for object instead of array\r",
+									"\r",
+									"//     //pm.expect(responseData).to.have.property('user_id').that.is.a('number');\r",
+									"//     pm.expect(responseData).to.have.property('user_first_name').that.is.a('string');\r",
+									"//     pm.expect(responseData).to.have.property('user_last_name').that.is.a('string');\r",
+									"//     pm.expect(responseData).to.have.property('user_contact_number').that.is.a('number');\r",
+									"//     pm.expect(responseData).to.have.property('user_email_id').that.is.a('string');\r",
+									"//     pm.expect(responseData).to.have.property('creation_time').that.is.a('string');\r",
+									"//     pm.expect(responseData).to.have.property('last_mod_time').that.is.a('string');\r",
+									"// });\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users/username/{{user_Firstname}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"username",
+								"{{user_Firstname}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUser FirstName-empty  endpoint404",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 404\", function () {\r",
+									"  pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Response time is less than 200ms\", function () {\r",
+									"//   pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"// });\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Validate the user schema\", function () {\r",
+									"//     const responseData = pm.response.json();\r",
+									"\r",
+									"//     pm.expect(responseData).to.be.an('object'); // Updated to check for object instead of array\r",
+									"\r",
+									"//     //pm.expect(responseData).to.have.property('user_id').that.is.a('number');\r",
+									"//     pm.expect(responseData).to.have.property('user_first_name').that.is.a('string');\r",
+									"//     pm.expect(responseData).to.have.property('user_last_name').that.is.a('string');\r",
+									"//     pm.expect(responseData).to.have.property('user_contact_number').that.is.a('number');\r",
+									"//     pm.expect(responseData).to.have.property('user_email_id').that.is.a('string');\r",
+									"//     pm.expect(responseData).to.have.property('creation_time').that.is.a('string');\r",
+									"//     pm.expect(responseData).to.have.property('last_mod_time').that.is.a('string');\r",
+									"// });\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users/username/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"username",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetuserbyUserId-invalid userId Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Response content type is application/json\", function () {\r",
+									"//     pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"// });\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Response time is less than 200ms\", function () {\r",
+									"//   pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"// });\r",
+									"\r",
+									"\r",
+									"// pm.test(\"User address object is valid\", function () {\r",
+									"//   const responseData = pm.response.json();\r",
+									"  \r",
+									"//   pm.expect(responseData).to.be.an('object');\r",
+									"//   pm.expect(responseData.userAddress).to.exist.and.to.be.an('object');\r",
+									"//   pm.expect(responseData.userAddress.addressId).to.exist.and.to.be.a('number');\r",
+									"//   pm.expect(responseData.userAddress.plotNumber).to.exist.and.to.be.a('string');\r",
+									"//   pm.expect(responseData.userAddress.street).to.exist.and.to.be.a('string');\r",
+									"//   pm.expect(responseData.userAddress.state).to.exist.and.to.be.a('string');\r",
+									"//   pm.expect(responseData.userAddress.country).to.exist.and.to.be.a('string');\r",
+									"//   pm.expect(responseData.userAddress.zipCode).to.exist.and.to.be.a('number');\r",
+									"// });\r",
+									"\r",
+									"\r",
+									"// pm.test(\"User ID is a non-negative integer\", function () {\r",
+									"//     const responseData = pm.response.json();\r",
+									"    \r",
+									"//     pm.expect(responseData.user_id).to.be.a('number').and.to.be.at.least(0);\r",
+									"// });\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/user/100002",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"100002"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetuserbyUserId-Empty_ userId 404",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Response content type is application/json\", function () {\r",
+									"//     pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"// });\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Response time is less than 200ms\", function () {\r",
+									"//   pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"// });\r",
+									"\r",
+									"\r",
+									"// pm.test(\"User address object is valid\", function () {\r",
+									"//   const responseData = pm.response.json();\r",
+									"  \r",
+									"//   pm.expect(responseData).to.be.an('object');\r",
+									"//   pm.expect(responseData.userAddress).to.exist.and.to.be.an('object');\r",
+									"//   pm.expect(responseData.userAddress.addressId).to.exist.and.to.be.a('number');\r",
+									"//   pm.expect(responseData.userAddress.plotNumber).to.exist.and.to.be.a('string');\r",
+									"//   pm.expect(responseData.userAddress.street).to.exist.and.to.be.a('string');\r",
+									"//   pm.expect(responseData.userAddress.state).to.exist.and.to.be.a('string');\r",
+									"//   pm.expect(responseData.userAddress.country).to.exist.and.to.be.a('string');\r",
+									"//   pm.expect(responseData.userAddress.zipCode).to.exist.and.to.be.a('number');\r",
+									"// });\r",
+									"\r",
+									"\r",
+									"// pm.test(\"User ID is a non-negative integer\", function () {\r",
+									"//     const responseData = pm.response.json();\r",
+									"    \r",
+									"//     pm.expect(responseData.user_id).to.be.a('number').and.to.be.at.least(0);\r",
+									"// });\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/user/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update invalid userId-404",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 404\", function () {\r",
+									"  pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// pm.test(\"User address schema is valid\", function () {\r",
+									"//   const responseData = pm.response.json();\r",
+									"  \r",
+									"//   pm.expect(responseData.userAddress).to.be.an('object');\r",
+									"//   pm.expect(responseData.userAddress.addressId).to.be.a('number');\r",
+									"//   pm.expect(responseData.userAddress.plotNumber).to.be.a('string');\r",
+									"//   pm.expect(responseData.userAddress.street).to.be.a('string');\r",
+									"//   pm.expect(responseData.userAddress.state).to.be.a('string');\r",
+									"//   pm.expect(responseData.userAddress.country).to.be.a('string');\r",
+									"//   pm.expect(responseData.userAddress.zipCode).to.be.a('number');\r",
+									"// });\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Validate user_id, user_first_name, user_last_name, user_contact_number, user_email_id, creation_time, and last_mod_time fields in the response\", function () {\r",
+									"//     const responseData = pm.response.json();\r",
+									"    \r",
+									"//     pm.expect(responseData).to.have.property('user_id').that.is.a('number');\r",
+									"//     pm.expect(responseData).to.have.property('user_first_name').that.is.a('string');\r",
+									"//     pm.expect(responseData).to.have.property('user_last_name').that.is.a('string');\r",
+									"//     pm.expect(responseData).to.have.property('user_contact_number').that.is.a('number');\r",
+									"//     pm.expect(responseData).to.have.property('user_email_id').that.is.a('string');\r",
+									"//     pm.expect(responseData).to.have.property('creation_time').that.is.a('string');\r",
+									"//     pm.expect(responseData).to.have.property('last_mod_time').that.is.a('string');\r",
+									"// });\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_first_name\": \"tester\",\r\n    \"user_last_name\": \"randomtester\",\r\n    \"user_contact_number\": \"5656565659\",\r\n    \"user_email_id\": \"team5psm12@gmail.com\",\r\n    \"userAddress\": {\r\n        \"plotNumber\": \"pl-3\",\r\n        \"street\": \"shadow sR\",\r\n        \"state\": \"GA\",\r\n        \"country\": \"INDIA\",\r\n        \"zipCode\": \"66466\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/updateuser/10000",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"updateuser",
+								"10000"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update empty userId-404",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 404\", function () {\r",
+									"  pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// pm.test(\"User address schema is valid\", function () {\r",
+									"//   const responseData = pm.response.json();\r",
+									"  \r",
+									"//   pm.expect(responseData.userAddress).to.be.an('object');\r",
+									"//   pm.expect(responseData.userAddress.addressId).to.be.a('number');\r",
+									"//   pm.expect(responseData.userAddress.plotNumber).to.be.a('string');\r",
+									"//   pm.expect(responseData.userAddress.street).to.be.a('string');\r",
+									"//   pm.expect(responseData.userAddress.state).to.be.a('string');\r",
+									"//   pm.expect(responseData.userAddress.country).to.be.a('string');\r",
+									"//   pm.expect(responseData.userAddress.zipCode).to.be.a('number');\r",
+									"// });\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Validate user_id, user_first_name, user_last_name, user_contact_number, user_email_id, creation_time, and last_mod_time fields in the response\", function () {\r",
+									"//     const responseData = pm.response.json();\r",
+									"    \r",
+									"//     pm.expect(responseData).to.have.property('user_id').that.is.a('number');\r",
+									"//     pm.expect(responseData).to.have.property('user_first_name').that.is.a('string');\r",
+									"//     pm.expect(responseData).to.have.property('user_last_name').that.is.a('string');\r",
+									"//     pm.expect(responseData).to.have.property('user_contact_number').that.is.a('number');\r",
+									"//     pm.expect(responseData).to.have.property('user_email_id').that.is.a('string');\r",
+									"//     pm.expect(responseData).to.have.property('creation_time').that.is.a('string');\r",
+									"//     pm.expect(responseData).to.have.property('last_mod_time').that.is.a('string');\r",
+									"// });\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_first_name\": \"tester\",\r\n    \"user_last_name\": \"randomtester\",\r\n    \"user_contact_number\": \"5656565659\",\r\n    \"user_email_id\": \"team5psm12@gmail.com\",\r\n    \"userAddress\": {\r\n        \"plotNumber\": \"pl-3\",\r\n        \"street\": \"shadow sR\",\r\n        \"state\": \"GA\",\r\n        \"country\": \"INDIA\",\r\n        \"zipCode\": \"66466\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/updateuser/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"updateuser",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteUser-Invalid-404",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 404\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(404);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Response has the required fields - status and message\", function () {\r",
+									"//     const responseData = pm.response.json();\r",
+									"    \r",
+									"//     pm.expect(responseData).to.be.an('object');\r",
+									"//     pm.expect(responseData.status).to.exist;\r",
+									"//     pm.expect(responseData.message).to.exist;\r",
+									"// });\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Response time is less than 500ms\", function () {\r",
+									"//   pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"// });\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Status and message fields are non-empty strings\", function () {\r",
+									"//     const responseData = pm.response.json();\r",
+									"    \r",
+									"//     pm.expect(responseData.status).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Status should be a non-empty string\");\r",
+									"//     pm.expect(responseData.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Message should be a non-empty string\")\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/deleteuser/4235659",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"deleteuser",
+								"4235659"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteUser-empty-404 Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 404\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(404);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Response has the required fields - status and message\", function () {\r",
+									"//     const responseData = pm.response.json();\r",
+									"    \r",
+									"//     pm.expect(responseData).to.be.an('object');\r",
+									"//     pm.expect(responseData.status).to.exist;\r",
+									"//     pm.expect(responseData.message).to.exist;\r",
+									"// });\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Response time is less than 500ms\", function () {\r",
+									"//   pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"// });\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Status and message fields are non-empty strings\", function () {\r",
+									"//     const responseData = pm.response.json();\r",
+									"    \r",
+									"//     pm.expect(responseData.status).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Status should be a non-empty string\");\r",
+									"//     pm.expect(responseData.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Message should be a non-empty string\")\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/deleteuser/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"deleteuser",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Data Driven Approach",
+			"item": [
+				{
+					"name": "New Folder",
+					"item": [
+						{
+							"name": "Add user dataDriven-201 Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// VERIFY STATUS CODE\r",
+											"pm.test(\"Response status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"// VERIFY RESPONSE TIME\r",
+											"pm.test(\"Response time is within an acceptable range\", function () {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"// VERIFY CONTENT TYPE-JSON\r",
+											"pm.test(\"Content-Type header is application/json\", function () {\r",
+											"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+											"});\r",
+											"\r",
+											"// VERIFY FIELD WITH DATA TYPES IN FIELD\r",
+											"pm.test(\"Response has the required fields\", function () {\r",
+											"    const responseData = pm.response.json();\r",
+											"    pm.expect(responseData.user_first_name).to.be.a(\"string\");\r",
+											"    pm.expect(responseData.user_last_name).to.be.a(\"string\");\r",
+											"    pm.expect(responseData.user_contact_number).to.be.a(\"number\");\r",
+											"    pm.expect(responseData.user_email_id).to.be.a(\"string\");\r",
+											"    pm.expect(responseData.creation_time).to.be.a(\"string\");\r",
+											"    pm.expect(responseData.last_mod_time).to.be.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"// CAPTURE USERID FROM RESPONSE AND USE IT FOR API CHAINING\r",
+											"const responseJson = pm.response.json();\r",
+											"pm.environment.set(\"user_id\", responseJson.user_id);\r",
+											"pm.environment.set(\"userFirstname\", responseJson.user_first_name);\r",
+											"\r",
+											"\r",
+											"//logging data in console\r",
+											"console.log(responseJson.user_first_name);\r",
+											"console.log(responseJson.user_last_name);\r",
+											"console.log(responseJson.user_contact_number);\r",
+											"console.log(responseJson.user_email_id);\r",
+											"console.log(pm.environment.get(\"user_id\")); // Fixed the ReferenceError by adding quotes around user_id\r",
+											"\r",
+											"// Verify the JSON schema of the response body\r",
+											"pm.test(\"Response body follows the JSON schema\", function () {\r",
+											"    var schema = {\r",
+											"        type: \"object\",\r",
+											"        properties: {\r",
+											"            userAddress: {\r",
+											"                type: \"object\",\r",
+											"                properties: {\r",
+											"                    addressId: { type: \"number\" },\r",
+											"                    plotNumber: { type: \"string\" },\r",
+											"                    street: { type: \"string\" },\r",
+											"                    state: { type: \"string\" },\r",
+											"                    country: { type: \"string\" },\r",
+											"                    zipCode: { type: \"number\" }\r",
+											"                },\r",
+											"                required: [\"addressId\", \"plotNumber\", \"street\", \"state\", \"country\", \"zipCode\"]\r",
+											"            },\r",
+											"            user_id: { type: \"number\" },\r",
+											"            user_first_name: { type: \"string\" },\r",
+											"            user_last_name: { type: \"string\" },\r",
+											"            user_contact_number: { type: \"number\" },\r",
+											"            user_email_id: { type: \"string\" },\r",
+											"            creation_time: { type: \"string\" },\r",
+											"            last_mod_time: { type: \"string\" }\r",
+											"        },\r",
+											"        required: [\"userAddress\", \"user_id\", \"user_first_name\", \"user_last_name\", \"user_contact_number\", \"user_email_id\", \"creation_time\", \"last_mod_time\"]\r",
+											"    };\r",
+											"    \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{apitoken}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "Numpy@gmail.com",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user_first_name\": \"{{Firstname}}\",\r\n    \"user_last_name\": \"{{Lastname}}\",\r\n    \"user_contact_number\": \"{{phonenumber}}\",\r\n    \"user_email_id\": \"{{email}}\",\r\n    \"userAddress\": {\r\n        \"plotNumber\": \"pl-2\",\r\n        \"street\": \"shadow sR\",\r\n        \"state\": \"GA\",\r\n        \"country\": \"INDIA\",\r\n        \"zipCode\": \"66466\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/createusers",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"createusers"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "apitoken",
+			"value": "userapi@october",
+			"type": "string"
+		}
+	]
+}
